@@ -8,11 +8,22 @@ output:
 
 ## Loading and preprocessing the data
 
+```{r}
+data <- unzip(zipfile = "activity.zip")
+activity <- read.csv(data)
+#class(activity)
+activity <- activity[complete.cases(activity),] 
+
+```
+
 
 
 ## What is mean total number of steps taken per day?
-
-
+```{r}
+head(activity)
+activityMean <- mean(activity$steps)
+activityMean
+```
 
 ## What is the average daily activity pattern?
 
