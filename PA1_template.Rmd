@@ -8,7 +8,7 @@ output:
 
 ## Loading and preprocessing the data
 
-```{r}
+```{r ,echo = TRUE}
 data <- unzip(zipfile = "activity.zip")
 activity <- read.csv(data)
 #class(activity)
@@ -19,10 +19,22 @@ activity <- activity[complete.cases(activity),]
 
 
 ## What is mean total number of steps taken per day?
-```{r}
+```{r ,echo = TRUE }
 head(activity)
-activityMean <- mean(activity$steps)
-activityMean
+
+
+
+
+activityAgg <- aggregate(activity$steps~activity$date, activity,sum)
+
+
+hist(x = activityAgg$`activity$steps`)
+
+activityAggMean <- mean(activityAgg$`activity$steps`)
+activityAggMean
+
+median(activityAgg$`activity$steps`)
+
 ```
 
 ## What is the average daily activity pattern?
