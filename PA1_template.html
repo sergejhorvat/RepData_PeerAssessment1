@@ -157,7 +157,6 @@ plot(y=activityInterval$`activity$steps`,
 #activityIntervalMaxInterval &lt;- max(activityInterval$`activity$steps`~ activityInterval$`activity$interval`)
 
 # Find the row of maximum steps
-
 maxInterval &lt;- activityInterval[which.max(activityInterval$`activity$steps`),]$`activity$interval`
 
 cat(&quot;Maximum number of averaged steps are &quot;, activityIntervalMax , &quot;in interval &quot;, maxInterval)</code></pre>

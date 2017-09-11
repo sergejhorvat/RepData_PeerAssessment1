@@ -37,7 +37,6 @@ activityIntervalMax <- max(activityInterval$`activity$steps`)
 #activityIntervalMaxInterval <- max(activityInterval$`activity$steps`~ activityInterval$`activity$interval`)
 
 # Find the row of maximum steps
-
 maxInterval <- activityInterval[which.max(activityInterval$`activity$steps`),]$`activity$interval`
 
 cat("Maximum number of averaged steps are ", activityIntervalMax , "in interval ", maxInterval)
@@ -46,6 +45,29 @@ cat("Maximum number of averaged steps are ", activityIntervalMax , "in interval 
 
 ## Imputing missing values
 
+```{r, echo=TRUE}
+activityOrg <- read.csv(data)
+totalMissing <- sum(is.na(activityOrg$steps))
+totalMissing
+cat("total number of missing step values from a original dataset is " , totalMissing)
 
+naRows <- which(is.na(activityOrg$steps))
+
+# ovo zamijeniti sa meanom od intervala 
+activityOrg[naRows,]$steps
+
+activityOrg[naRows,]$interval
+
+mean(activity$interval==activityOrg$interval)
+
+activityInterval[activityOrg[naRows,]$interval==activityInterval$`activity$interval`,]$`activity$steps`
+
+activityOrg[naRows,]$interval==activityInterval$`activity$interval`
+
+activityOrg[is.na(activityOrg)] <- activityInterval[activityOrg[naRows,]$interval==activityInterval$`activity$interval`,]$`activity$steps`
+
+activityOrg
+
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?

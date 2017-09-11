@@ -69,7 +69,6 @@ activityIntervalMax <- max(activityInterval$`activity$steps`)
 #activityIntervalMaxInterval <- max(activityInterval$`activity$steps`~ activityInterval$`activity$interval`)
 
 # Find the row of maximum steps
-
 maxInterval <- activityInterval[which.max(activityInterval$`activity$steps`),]$`activity$interval`
 
 cat("Maximum number of averaged steps are ", activityIntervalMax , "in interval ", maxInterval)
