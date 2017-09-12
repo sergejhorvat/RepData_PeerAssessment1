@@ -58,15 +58,26 @@ activityOrg[naRows,]$steps
 
 activityOrg[naRows,]$interval
 
-mean(activity$interval==activityOrg$interval)
 
-activityInterval[activityOrg[naRows,]$interval==activityInterval$`activity$interval`,]$`activity$steps`
+#activityInterval[activityOrg[naRows,]$interval==activityInterval$`activity$interval`,]$`activity$steps`
 
-activityOrg[naRows,]$interval==activityInterval$`activity$interval`
+#activityOrg[naRows,]$interval==activityInterval$`activity$interval`
+activityOrgFilled <- activityOrg
 
-activityOrg[is.na(activityOrg)] <- activityInterval[activityOrg[naRows,]$interval==activityInterval$`activity$interval`,]$`activity$steps`
 
-activityOrg
+
+# Try to loop for NA and find the interval to replace with
+for(i in 1:nrow(activityOrgFilled))
+  {
+    if (is.na(activityOrgFilled$steps[i])) 
+    {
+      activityOrgFilled$steps[i] <- activityInterval[activityOrgFilled$interval[i]==activityInterval$`activity$interval`,]$`activity$steps`
+    }
+}
+
+# Is there any NA fileds in new data frame activityOrgFilled?
+naRows2 <- sum(is.na(activityOrgFilled$steps))
+cat("With filled in mean intervals there are " , naRows2 , " NA fields")
 
 ```
 
