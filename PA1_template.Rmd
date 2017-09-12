@@ -20,7 +20,7 @@ activity <- activity[complete.cases(activity),]
 ```{r ,echo = TRUE }
 head(activity)
 activityAgg <- aggregate(activity$steps~activity$date, activity,sum)
-hist(x = activityAgg$`activity$steps`)
+hist(x = activityAgg$`activity$steps` , breaks=50)
 activityAggMean <- mean(activityAgg$`activity$steps`)
 cat("Daily mean steps are: " , activityAggMean )
 activityMedian <- median(activityAgg$`activity$steps`)
@@ -34,11 +34,8 @@ plot(y=activityInterval$`activity$steps`,
      x=activityInterval$`activity$interval`,type = "l")
 activityIntervalMax <- max(activityInterval$`activity$steps`)
 
-#activityIntervalMaxInterval <- max(activityInterval$`activity$steps`~ activityInterval$`activity$interval`)
-
 # Find the row of maximum steps
 maxInterval <- activityInterval[which.max(activityInterval$`activity$steps`),]$`activity$interval`
-
 cat("Maximum number of averaged steps are ", activityIntervalMax , "in interval ", maxInterval)
 ```
 
@@ -53,20 +50,10 @@ cat("total number of missing step values from a original dataset is " , totalMis
 
 naRows <- which(is.na(activityOrg$steps))
 
-# ovo zamijeniti sa meanom od intervala 
-activityOrg[naRows,]$steps
-
-activityOrg[naRows,]$interval
-
-
-#activityInterval[activityOrg[naRows,]$interval==activityInterval$`activity$interval`,]$`activity$steps`
-
-#activityOrg[naRows,]$interval==activityInterval$`activity$interval`
+# Create a new data frame for filling NA values
 activityOrgFilled <- activityOrg
 
-
-
-# Try to loop for NA and find the interval to replace with
+# Loop for NA and find the interval to replace with
 for(i in 1:nrow(activityOrgFilled))
   {
     if (is.na(activityOrgFilled$steps[i])) 
@@ -79,6 +66,46 @@ for(i in 1:nrow(activityOrgFilled))
 naRows2 <- sum(is.na(activityOrgFilled$steps))
 cat("With filled in mean intervals there are " , naRows2 , " NA fields")
 
+# Make a histogram of the total number of steps taken each day
+activityOrgFilledAgg <- aggregate(activityOrgFilled$steps~activityOrgFilled$date, activityOrgFilled,sum)
+
+hist(x = activityOrgFilledAgg$`activityOrgFilled$steps`, breaks=50)
+
+# Report
+# Mean
+activityOrgFilledAggMean <- mean(activityOrgFilledAgg$`activityOrgFilled$steps`)
+cat("Daily mean steps are: " , activityOrgFilledAggMean )
+# Median
+activityOrgFilledAggMedian <- median(activityOrgFilledAgg$`activityOrgFilled$steps`)
+cat("Daily median steps are: " , activityOrgFilledAggMedian)
+cat("We can see that median and mean are  the same as without filled in data, so our filled in mean data did not have impact on overall dataset. Good job!")
+
+
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r , echo=TRUE}
+# Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" 
+
+activityOrgFilled$weekday <- as.factor(weekdays(as.Date(activityOrgFilled$date)))
+activityOrgFilled$weekday <- ifelse(weekdays(as.Date(activityOrgFilled$date)) %in% c("subota", "nedjelja"), "weekend", "weekday")
+
+activityOrgFilled$weekday <- as.factor(activityOrgFilled$weekday)
+
+# Plot by facors for weekdays and weekends
+
+library(ggplot2)
+p <- ggplot(data=activityOrgFilled , aes(x=interval,y=steps)) 
+p <- p + geom_line()
+p <- p + scale_fill_brewer(palette="Set1")
+p <- p + facet_wrap(~weekday ,ncol=1)
+p
+qplot(
+  x=interval,
+  y=steps,
+  data = activityOrgFilled,
+  color=activityOrgFilled$weekday
+)
+
+cat("We can see differences in activity in weekdays and weekends.")
+```
